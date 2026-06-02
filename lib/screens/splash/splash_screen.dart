@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:blog_app/screens/auth/register.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,6 +11,15 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState(){
+    super.initState();
+
+    Timer(Duration(seconds: 3),(){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Register()));
+    });
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF005FEE),
