@@ -10,6 +10,11 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final formkey = GlobalKey<FormState>();
+  final email = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +24,9 @@ class _SignupState extends State<Signup> {
           spacing: 0,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create Your Account', style: TextStyle(fontSize: 30),),
+            Text('Create Your Account', style: TextStyle(fontSize: 35),),
             Row(
-              spacing: -0,
+              spacing: 0,
               children: [
                 Text('Do you already have an account?', style: TextStyle(fontSize: 16, color: Colors.black54),),
                 TextButton( onPressed: (){
@@ -33,42 +38,77 @@ class _SignupState extends State<Signup> {
               height: 50,
             ),
             Form(
+              key: formkey,
                 child: Column(
                   spacing: 20,
                   children: [
                     TextFormField(
+                      controller: firstName,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsetsGeometry.symmetric(vertical: 10, horizontal: 10),
-                        hintText: 'User Name',
+                        hintText: 'First Name',
                         hintStyle: TextStyle(color: Colors.black45),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red)
                         )
                       ),
+                      validator: (value){
+                        if (value == null || value.isEmpty){
+                          return 'Please enter first name';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'First Name',
-                        hintStyle: TextStyle(color: Colors.black45),
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsetsGeometry.symmetric(vertical: 10, horizontal: 10),
-                      ),
-                    ),
-                    TextFormField(
+                      controller: lastName,
                       decoration: InputDecoration(
                         hintText: 'Last Name',
                         hintStyle: TextStyle(color: Colors.black45),
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsetsGeometry.symmetric(vertical: 10, horizontal: 10),
                       ),
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return 'Please enter last name';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
+                      controller: email,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: TextStyle(color: Colors.black45),
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsetsGeometry.symmetric(vertical: 10, horizontal: 10),
+                      ),
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return 'Please enter email';
+                        }
+                        if(!value.contains('@')){
+                          return 'Please enter valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: password,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         hintStyle: TextStyle(color: Colors.black45),
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsetsGeometry.symmetric(vertical: 10, horizontal: 10),
                       ),
+                      validator: (value){
+                        if(value == null){
+                          return 'Please enter password';
+                        }
+                        if(value.length <= 7){
+                          return 'password length must be less than 8';
+                        }
+                        return null;
+                      },
                     ),
                     SizedBox(
                       height: 40,
@@ -77,7 +117,10 @@ class _SignupState extends State<Signup> {
                       height: 50,
                       width: double.infinity,
                       child: ElevatedButton(onPressed: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                        if (formkey.currentState!.validate()){
+                          print(' validation done');
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+                        }
                       },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0055FEE),

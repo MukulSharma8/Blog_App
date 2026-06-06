@@ -11,18 +11,21 @@ class Signin extends StatefulWidget {
 
 class _SigninState extends State<Signin> {
   @override
+
+  final formkey = GlobalKey<FormState>();
+  final name = TextEditingController();
+  final password = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 170, horizontal: 20),
           child: Column(
-            spacing: 0,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Sign In', style: TextStyle(fontSize: 30)),
+              Text('Sign In', style: TextStyle(fontSize: 50)),
               Row(
-                spacing: 0,
                 children: [
                   Text(
                     "Don't have an account?",
@@ -44,11 +47,13 @@ class _SigninState extends State<Signin> {
               ),
               SizedBox(height: 60),
               Form(
+                key: formkey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 20,
                   children: [
                     TextFormField(
+                      controller: name,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10,
@@ -57,8 +62,15 @@ class _SigninState extends State<Signin> {
                         hintText: 'User Name',
                         border: OutlineInputBorder(),
                       ),
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return 'Please Enter your name';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
+                      controller: password,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         border: OutlineInputBorder(),
@@ -67,6 +79,12 @@ class _SigninState extends State<Signin> {
                           horizontal: 10,
                         ),
                       ),
+                      validator: (value){
+                        if(value == null || value.isEmpty){
+                          return 'Please enter password';
+                        }
+                        return null;
+                      },
                     ),
                     Row(
                       children: [
@@ -79,12 +97,14 @@ class _SigninState extends State<Signin> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
+                          if (formkey.currentState!.validate()){
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF0055FEE),
